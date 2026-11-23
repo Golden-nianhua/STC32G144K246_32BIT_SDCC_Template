@@ -60,9 +60,11 @@ build/Debug/firmware/   Debug 固件，Release 路径结构相同
 | App | `STC32G144K246_32BIT_SDCC_Template_flash_with_options` | 先构建，再通过 USB-HID 下载，关闭 ICE，并写入 TOML 中的硬件选项 |
 | tools | `stc_info` | 读取芯片型号、BSL 版本、保存的 IRC 频率和当前硬件选项 |
 | tools | `stc_debug_enable` | 按 `Misc/stcforge.toml` 启用仿真。走 ISP，会擦除程序区；USB 模式同时下载当前 Debug 固件 |
-| 独立入口 | `STCForge_swd` | SWD 直接调试，不在启动前读取或写入 Flash；板内程序应与本地调试符号一致 |
-| 独立入口 | `STCForge_swd_flash` | 先用 SWD 比较镜像、更新差异页并校验，再启动调试 |
-| 独立入口 | `STCForge_debug` | 选择 USB-ICE 时使用，只连接调试 |
+| Debug | `STCForge_swd` | SWD 直接调试，不逐页校验或写入 Flash；板内程序应与本地调试符号一致 |
+| Debug | `STCForge_swd_flash` | GDB 连接后通过 SWD 比较镜像、更新差异页并校验，然后进入调试 |
+| Debug | `STCForge_debug` | 选择 USB-ICE 时使用，只连接调试 |
+
+两个 SWD 入口共用普通固件构建目标，Debug 构建同时生成调试 ELF。新版入口需要配套更新 STCForge；旧版便携包仍可构建固件和符号，但不会生成上述调试入口。
 
 命令行目标：
 
