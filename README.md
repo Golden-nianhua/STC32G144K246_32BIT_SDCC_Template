@@ -26,7 +26,7 @@ cmake --preset STC32G144K246-Release
 cmake --build build/Release
 ```
 
-从旧配置迁移或更换 SDCC 时，重置 CMake 缓存再重新加载。编译直接运行 `sdcc`，原来被过滤的宏重定义和 `DPTR no-match` 诊断会原样输出。
+从旧配置迁移或更换 SDCC 时，重置 CMake 缓存再重新加载。CMake 只过滤 `DPTR no-match:` 优化日志，以及 SDCC 驱动覆盖 `__has_builtin`、`__STDC_HOSTED__` 内置定义时产生的固定警告；其他诊断照常显示。
 
 ## 目录
 
@@ -60,7 +60,9 @@ build/Debug/firmware/   Debug 固件，Release 路径结构相同
 | App | `STC32G144K246_32BIT_SDCC_Template_flash_with_options` | 先构建，再通过 USB-HID 下载，关闭 ICE，并写入 TOML 中的硬件选项 |
 | tools | `stc_info` | 读取芯片型号、BSL 版本、保存的 IRC 频率和当前硬件选项 |
 | tools | `stc_debug_enable` | 按 `Misc/stcforge.toml` 启用仿真。走 ISP，会擦除程序区；USB 模式同时下载当前 Debug 固件 |
-| 独立入口 | `STCForge_debug` | 构建并启动调试。启用 `swd_sync_flash` 时 SWD 只更新不同的页；USB-ICE 直接连接 |
+| 独立入口 | `STCForge_swd` | SWD 直接调试，不在启动前读取或写入 Flash；板内程序应与本地调试符号一致 |
+| 独立入口 | `STCForge_swd_flash` | 先用 SWD 比较镜像、更新差异页并校验，再启动调试 |
+| 独立入口 | `STCForge_debug` | 选择 USB-ICE 时使用，只连接调试 |
 
 命令行目标：
 

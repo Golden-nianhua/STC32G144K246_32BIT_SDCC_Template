@@ -64,7 +64,8 @@ add_executable(${CMAKE_PROJECT_NAME}
     Hardware/Src/bsp_i2c.c
 )
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/firmware" FOLDER "App")
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/firmware" FOLDER "App"
+    C_COMPILER_LAUNCHER "${CMAKE_COMMAND};-P;${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdcc-compile.cmake;--")
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE Core/Inc Drivers/Inc Hardware/Inc)
 
 # USB-ICE V4.0 在现有 90 MHz 时钟切换附近失联，先提供与 Keil 测试例程

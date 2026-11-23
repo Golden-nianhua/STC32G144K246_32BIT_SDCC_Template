@@ -16,7 +16,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
             --source-dir Drivers/Src --source-dir Hardware/Src
         DEPENDS ${CMAKE_PROJECT_NAME}
         BYPRODUCTS "${CMAKE_BINARY_DIR}/firmware/${CMAKE_PROJECT_NAME}.debug.elf"
-        COMMENT "生成调试符号，按所选方式准备调试"
+        COMMENT "生成调试符号"
         USES_TERMINAL
         VERBATIM)
     set_target_properties(stc_debug_build PROPERTIES FOLDER "tools")
@@ -29,12 +29,25 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         --project-name "${CMAKE_PROJECT_NAME}" --root "${CMAKE_SOURCE_DIR}"
         --image "${CMAKE_BINARY_DIR}/firmware/${CMAKE_PROJECT_NAME}.hex" --preset STC32G144K246-Debug
         --toolchain MCS-251 --launcher "${STCFORGE_EXECUTABLE}" --isp "${STC_ISP_EXECUTABLE}"
-        RESULT_VARIABLE stcforge_result)
+        RESULT_VARIABLE stcforge_result OUTPUT_VARIABLE stcforge_mode OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(NOT stcforge_result STREQUAL "0")
         message(FATAL_ERROR "STCForge 运行配置生成失败，请检查 Misc/stcforge.toml")
     endif()
+    if(stcforge_mode STREQUAL "swd")
+        # 仅下载入口使用这个目标；耗时的下载和校验不占用 GDB 的启动等待时间。
+        add_custom_target(stc_debug_build_with_flash
+            COMMAND ${stcforge_command} sync-swd --image "${firmware_image}"
+            DEPENDS stc_debug_build
+            COMMENT "通过 SWD 同步并校验调试固件"
+            USES_TERMINAL
+            VERBATIM)
+        set_target_properties(stc_debug_build_with_flash PROPERTIES FOLDER "tools")
+    elseif(NOT stcforge_mode MATCHES "^(usb|uart)$")
+        message(FATAL_ERROR "当前 STCForge 不支持独立的直接调试和下载入口，请更新 STCFORGE_BIN")
+    endif()
 endif()
-# Release 并行配置时也保留由 Debug 生成的两个入口。
+# Release 不负责生成或清理 Debug 的入口。
 set_property(GLOBAL APPEND PROPERTY STC_CLION_RUN_CONFIGS
     "${run_dir}/STC32_Auto_STCForge_debug.xml"
+    "${run_dir}/STC32_Auto_STCForge_swd_flash.xml"
     "${run_dir}/STC32_Auto_stc_debug_enable.xml")
