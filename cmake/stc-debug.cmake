@@ -38,5 +38,6 @@ endif()
 # Release 不负责生成或清理 Debug 的入口。
 set_property(GLOBAL APPEND PROPERTY STC_CLION_RUN_CONFIGS
     "${run_dir}/STC32_Auto_STCForge_debug.xml"
+    "${run_dir}/STC32_Auto_STCForge_swd_attach.xml"
     "${run_dir}/STC32_Auto_STCForge_swd_flash.xml"
     "${run_dir}/STC32_Auto_stc_debug_enable.xml")

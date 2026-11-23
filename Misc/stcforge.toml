@@ -16,7 +16,7 @@ device_path = ""
 # Link1D 的 HID 路径留空表示自动选择唯一探针。
 swd_device_path = ""
 swd_speed_khz = 600
-# STCForge_swd 直接连接；STCForge_swd_flash 下载并校验后连接。
+# STCForge_swd_attach 直接连接；STCForge_swd_flash 下载并校验后连接。
 # 本板的 SWD 接线。
 swd_pins = "p1.6-p1.7"
 
