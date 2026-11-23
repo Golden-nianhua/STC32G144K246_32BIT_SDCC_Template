@@ -1,0 +1,5 @@
+* text=auto
+
+# 原始抓包和手册图片按二进制保存，保证 Git 不改变校验和。
+*.pcapng -text
+*.png -text

@@ -1,0 +1,26 @@
+# 本文件仅用于仿真启用和调试；普通下载及 stc_info 使用 stc-isp.toml。
+[stcforge]
+model = "STC32G144K246"
+# GDB 由 CLion 的 MCS-251 工具链指定，不在这里重复设置。
+# 调试方式：swd = Link1D，usb = 芯片自身的 USB-ICE。
+# 本型号不支持 UART 仿真，串口仅可作为 ISP 下载接口。
+simulation_mode = "swd"
+# 仅监听本机。
+port = 3333
+# CLion 启动服务端后等待的毫秒数。
+# V4.0 的已暂停状态可能不回暂停确认，服务端会等约 1 秒再读 CPU 快照确认。
+# 默认预留 3 秒完成握手和状态检查，机器较慢时可继续增加。
+warmup_ms = 3000
+# 多个 USB-ICE 同时连接时填写 hidapi 路径；空字符串表示自动选择唯一设备。
+device_path = ""
+# Link1D 的 HID 路径留空表示自动选择唯一探针。
+swd_device_path = ""
+swd_speed_khz = 600
+swd_sync_flash = true
+# 本板的 SWD 接线。
+swd_pins = "p1.6-p1.7"
+
+[simulation_isp]
+# 仅用于显式制作仿真芯片；不填 if 时按调试模式选 ISP 通道。
+download_image = true
+link1d_auto_power = true

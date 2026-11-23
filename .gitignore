@@ -1,0 +1,18 @@
+/build/
+/cmake-build*/
+/CMakeUserPresets.json
+*.adb
+*.lst
+*.rel
+*.rst
+*.sym
+__pycache__/
+*.pyc
+
+# 参考资料、实验工程及非构建必需的工具只留本地。
+/Misc/Reference/
+/Misc/Experiments/
+/tools/*
+!/tools/build/
+/tools/build/*
+!/tools/build/firmware.py
