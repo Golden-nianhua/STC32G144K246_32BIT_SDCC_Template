@@ -72,7 +72,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE Core/Inc Drivers/Inc Ha
 # 一致的 IRC48M 调试主频。此兼容方案待实板复测，Release 仍使用 90 MHz。
 option(STC_USB_ICE_SAFE_CLOCK "Debug 使用 IRC48M 48 MHz 排查 USB-ICE 时钟兼容性" ON)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    $<$<AND:$<BOOL:${STC_USB_ICE_SAFE_CLOCK}>,$<CONFIG:Debug>>:STC_USB_ICE_DEBUG=1>)
+    $<$<AND:$<BOOL:${STC_USB_ICE_SAFE_CLOCK}>,$<CONFIG:Debug>>:STC_USB_ICE_DEBUG=1>
+    $<$<CONFIG:Debug>:STC_DEBUG_WATCH_DEMO=1>)
 
 # 编译和链接必须采用相同模型、栈约定和配套运行库。
 # large：普通变量使用 24 位 XRAM；stack-auto：自动变量使用 16 位 SPX。
