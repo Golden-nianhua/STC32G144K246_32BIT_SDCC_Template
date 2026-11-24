@@ -66,6 +66,10 @@ build/Debug/firmware/   Debug 固件，Release 路径结构相同
 
 两个 SWD 入口共用普通固件构建目标，Debug 构建同时生成调试 ELF。新版入口需要配套更新 STCForge；旧版便携包仍可构建固件和符号，但不会生成上述调试入口。
 
+调试时可在 CLion 的 **Peripherals（外设）** 页签加载 [STC32G144K246.svd](Misc/STC32G144K246.svd)。
+这份视图按芯片外设分组，保留常用配置、状态和计数寄存器，并区分只读与可读写项。
+扩展寄存器需要支持 XFR 地址窗的 STCForge，详见[外设状态](Misc/STCFORGE_DEBUG.md#外设状态)。
+
 命令行目标：
 
 ```powershell
